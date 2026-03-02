@@ -1,23 +1,49 @@
-#include <iostream>
-
+#include<bits/stdc++.h>
 using namespace std;
 
-int main()
-{
-    int t , n, m;
-    cout << "Hello world!" << endl;
-    cin >> t;
+stack<char>S;
 
-    for ( int i = 0; i < t; i++){
+int priority(char s){
+	if(s == '^'){
+		return 100;
+	}else if(s == '=' && s == '/'){
+		return 50;
+	}else if(s == '+' && s == '-'){
+		return 20;
+	}else{
+		return 0;
+	}
+};
 
-        cin >> n >> m;
-        for (int j = 0; j < n; j++){
-            int a ;
-            int arr[m];
-            cin >> a >> arr[a];
-        }
+int main (){
+	
+	string infix, postfix = "";
 
-        
-    }
-    return 0;
+	cin >> infix;
+	for (int i = 0; i < infix.size();i++ ){
+		char symbol = infix[i];
+		if(symbol >= 'A' && symbol <= 'Z'){
+			postfix = postfix+symbol;
+		}else if(symbol == '('){
+			S.push(symbol);
+		}else if(symbol == ')'){
+			while(!S.empty() && S.top() != '('){
+				postfix = postfix + S.top();
+			}
+			S.pop();
+		}else{
+			while(!S.empty() && priority(S.top()) >= priority(symbol)){
+				postfix = postfix + S.top();
+			}
+			S.push(symbol);
+		}
+	}
+
+	while(!S.empty()){
+		postfix = postfix + S.top();
+		S.pop();
+	}
+
+	cout << postfix << endl;
+	return 0;
 }
